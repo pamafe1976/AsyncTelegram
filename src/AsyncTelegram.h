@@ -212,7 +212,8 @@ public:
     void editMessageReplyMarkup(TBMessage &msg, InlineKeyboard &keyboard);
 
 
-    void setClock(const char* TZ, uint32_t maxTime = 5000);
+    void setClock(uint32_t maxTime = 60000);
+    void setTimeZone (int utcshift);
     bool getUpdates();
     String userName ;
 
@@ -230,7 +231,7 @@ private:
     bool            m_insecure = true;
     uint8_t         m_fingerprint[20];
     TBUser          m_user;
-
+    int             m_utcshift = 3;
     InlineKeyboard  m_inlineKeyboard;   // last inline keyboard showed in bot
 
     // Struct for store telegram server reply and infos about it

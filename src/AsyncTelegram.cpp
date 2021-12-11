@@ -29,33 +29,45 @@ AsyncTelegram::AsyncTelegram() {
 
 AsyncTelegram::~AsyncTelegram() {};
 
+void AsyncTelegram::setTimeZone (int utcshift) {
+    m_utcshift = utcshift;
+}
+
 // Set time via NTP, as required for x.509 validation
-void AsyncTelegram::setClock(const char* TZ,  uint32_t maxTime)
+void AsyncTelegram::setClock(uint32_t maxTime)
 {
+//char tz[10];
+//sprintf (tz,"UTC%+d",-m_utcshift);
+
     // Set timezone and NTP servers
 #ifdef ESP8266
-    configTime(TZ, "time.google.com", "time.windows.com", "pool.ntp.org");
+    configTime(m_utcshift,0, "time.google.com", "time.windows.com", "pool.ntp.org");
 #elif defined(ESP32)
-    configTzTime(TZ, "time.google.com", "time.windows.com", "pool.ntp.org");
+    configTzTime(tz, "time.google.com", "time.windows.com", "pool.ntp.org");
 #endif 
   uint32_t start = millis();
   Serial.print("Waiting for NTP time sync: ");
+  Serial.println (maxTime);
   time_t now = time(nullptr);
-  while ((now < 8 * 3600 * 2) && (millis() -start < maxTime)) {
-    delay(200);
+  while ((now < 1639094326) && (millis() -start < maxTime)) {    
+    time_t nowtime;
+    time (&nowtime);
+    char buff[30];
+    strftime (buff,28,"%H:%M:%S - %a %d/%m/%Y",localtime(&nowtime));
+    Serial.println (buff);
+    
+    delay(1000);
     Serial.print(".");
     now = time(nullptr);
   }
 }
 
-
 bool AsyncTelegram::begin(){
 
   // Check NTP time, set default if not (Rome, Italy)
   time_t now = time(nullptr);
-  if (now < 8 * 3600 * 2) 
-    setClock("CET-1CEST,M3.5.0,M10.5.0/3");  
-
+   if (now < 1639094326) 
+    setClock();  
     telegramClient = new WiFiClientSecure;
     telegramClient->setTimeout(SERVER_TIMEOUT);
 #if defined(ESP8266)
