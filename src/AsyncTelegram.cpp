@@ -29,6 +29,7 @@ AsyncTelegram::AsyncTelegram() {
 
 AsyncTelegram::~AsyncTelegram() {};
 
+
 void AsyncTelegram::setTimeZone (int utcshift) {
     m_utcshift = utcshift;
 }
@@ -62,12 +63,15 @@ void AsyncTelegram::setClock(uint32_t maxTime)
   }
 }
 
+
 bool AsyncTelegram::begin(){
 
   // Check NTP time, set default if not (Rome, Italy)
   time_t now = time(nullptr);
-   if (now < 1639094326) 
+  if (now < 1639094326) {
     setClock();  
+  }
+
     telegramClient = new WiFiClientSecure;
     telegramClient->setTimeout(SERVER_TIMEOUT);
 #if defined(ESP8266)
@@ -485,8 +489,9 @@ void AsyncTelegram::sendTo(const int32_t userid, String &message, String keyboar
 
 void AsyncTelegram::sendPhotoByUrl(const uint32_t& chat_id,  const String& url, const String& caption)
 {
-    if (url.length() == 0)
+    if (url.length() == 0) {
         return;
+    }
 	smallDoc.clear();
     smallDoc["chat_id"] = chat_id;
     smallDoc["photo"] = url;
@@ -517,8 +522,9 @@ void AsyncTelegram::sendToChannel(const char* &channel, String &message, bool si
 
 void AsyncTelegram::endQuery(const TBMessage &msg, const char* message, bool alertMode)
 {
-    if (strlen(msg.callbackQueryID) == 0)
+    if (strlen(msg.callbackQueryID) == 0) {
         return;
+    }
 	smallDoc.clear();
     smallDoc["callback_query_id"] =  msg.callbackQueryID;
     if (strlen(message) != 0) {

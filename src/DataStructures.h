@@ -4,9 +4,9 @@
 
 #include <Arduino.h>
 
-#define BUFFER_BIG       	2048 		// json parser buffer size (ArduinoJson v6)
-#define BUFFER_MEDIUM     	1028 		// json parser buffer size (ArduinoJson v6)
-#define BUFFER_SMALL      	512 		// json parser buffer size (ArduinoJson v6)
+#define BUFFER_BIG       	4096 		// json parser buffer size (ArduinoJson v6)
+#define BUFFER_MEDIUM     	2048 		// json parser buffer size (ArduinoJson v6)
+#define BUFFER_SMALL      	1024 		// json parser buffer size (ArduinoJson v6)
 
 enum MessageType {
 	MessageNoData   = 0,
@@ -70,7 +70,7 @@ struct TBDocument {
 
 struct TBMessage {
 	MessageType 	 messageType;
-	bool		 isHTMLenabled = false;
+	bool		 isHTMLenabled = true;
 	bool             isMarkdownEnabled = false;
 	bool 	         disable_notification = false;
 	bool		 force_reply = false;

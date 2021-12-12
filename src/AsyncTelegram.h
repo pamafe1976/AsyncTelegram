@@ -231,7 +231,9 @@ private:
     bool            m_insecure = true;
     uint8_t         m_fingerprint[20];
     TBUser          m_user;
+
     int             m_utcshift = 3;
+
     InlineKeyboard  m_inlineKeyboard;   // last inline keyboard showed in bot
 
     // Struct for store telegram server reply and infos about it
